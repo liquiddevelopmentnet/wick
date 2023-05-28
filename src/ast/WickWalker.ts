@@ -1,10 +1,13 @@
+import { ParserRuleContext } from 'antlr4ts'
 import {
 	FieldContext,
+	SchemaContext,
 	SchemaFieldContext,
 	SchemaScopedBlockContext,
 	ScopedBlockContext,
 } from '../antlr4/WickParser'
 import { WickParserListener } from '../antlr4/WickParserListener'
+import { pushError } from '../util/Errors'
 
 export class WickWalker implements WickParserListener {
 	scopeLevel: string[] = []
@@ -16,10 +19,43 @@ export class WickWalker implements WickParserListener {
 		this.callback = callback
 	}
 
-	_assignToScope(id: string, val: any, object?: any) {
+	_assignToScope(
+		id: string,
+		val: any,
+		ctx: ParserRuleContext,
+		object?: any,
+		canMerge = true
+	) {
 		let obj = object ?? this.object
 		this.scopeLevel.forEach((scope) => (obj = obj[scope] ??= {}))
-		obj[id] = val
+
+		if (!canMerge && obj[id]) {
+			pushError({
+				name: 'RedeclarationError',
+				message: `duplicated field ${id} is not allowed here`,
+				line: ctx.start.line,
+				column: ctx.start.charPositionInLine,
+			})
+			return
+		}
+
+		if (obj[id] && Array.isArray(obj[id])) {
+			// if array is 2d, push, if not make 2d and then push
+			if (Array.isArray(obj[id][0])) {
+				obj[id].push(val)
+			} else {
+				obj[id] = [obj[id], val]
+			}
+		}
+		// make array if needed
+		else if (obj[id]) {
+			obj[id] = [obj[id], val]
+		}
+
+		// if not array, just assign
+		else {
+			obj[id] = val
+		}
 	}
 
 	// --- START SCHEMA
@@ -27,8 +63,7 @@ export class WickWalker implements WickParserListener {
 	enterSchemaField(ctx: SchemaFieldContext) {
 		let id: string = ctx.id().text
 		let val: string | string[] = ctx.schemaType().map((type) => type.text)
-		val = val.length === 1 ? val[0] : val
-		this._assignToScope(id, val, this.schema)
+		this._assignToScope(id, val, ctx, this.schema, false)
 	}
 
 	enterSchemaScopedBlock(ctx: SchemaScopedBlockContext) {
@@ -39,8 +74,8 @@ export class WickWalker implements WickParserListener {
 		this.scopeLevel.pop()
 	}
 
-	exitSchema() {
-		this._assignToScope('_schema', this.schema)
+	exitSchema(ctx: SchemaContext) {
+		this._assignToScope('_schema', this.schema, ctx)
 		this.scopeLevel = []
 	}
 
@@ -75,10 +110,9 @@ export class WickWalker implements WickParserListener {
 				arg.variable() && val.push({ _variable: arg.variable()!.text })
 			})
 
-		val.length === 0 && (val = true)
-		val.length === 1 && (val = val[0])
+		val.length === 0 && (val = [true])
 
-		this._assignToScope(id, val)
+		this._assignToScope(id, val, ctx)
 	}
 
 	// END CONFIG

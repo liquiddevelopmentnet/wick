@@ -1,26 +1,21 @@
-import { WickParserListener } from './antlr4/WickParserListener'
-import { WickParser } from './antlr4/WickParser'
-import { WickLexer } from './antlr4/WickLexer'
-import { CharStreams, CommonTokenStream } from 'antlr4ts'
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker'
-import { readFileSync } from 'fs'
-import { WickWalker } from './ast/WickWalker'
-import { inspect } from 'util'
+import { errors, printErrors } from './util/Errors'
+import { parse } from './ast/ModuleParser'
+import chalk from 'chalk'
 
-let inputStream = CharStreams.fromString(readFileSync(process.argv[2], 'utf8'))
+export * from './ast/ModuleParser'
+export { WickError } from './util/Errors'
 
-let lexer = new WickLexer(inputStream)
-let tokenStream = new CommonTokenStream(lexer)
-let parser = new WickParser(tokenStream)
+const main = async () => {
+	const { module } = await parse(process.argv[2])
 
-let tree = parser.compilationUnit()
+	if (errors.length > 0) {
+		printErrors(errors)
+		console.error()
+		console.error(chalk.redBright(`failed with ${errors.length} errors`))
+		process.exit(1)
+	}
 
-ParseTreeWalker.DEFAULT.walk(
-	new WickWalker((module) => {
-		console.log(`finished parsing ${process.argv[2]}`)
-		console.log(
-			inspect(module, { showHidden: false, depth: null, colors: true })
-		)
-	}) as WickParserListener,
-	tree
-)
+	console.log(JSON.stringify(module, null, 2))
+}
+
+main()

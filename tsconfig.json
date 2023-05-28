@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es2017",
-		"module": "commonjs",
+		"module": "CommonJS",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
@@ -10,7 +10,7 @@
 		"outDir": "./lib",
 		"declaration": true,
 		"declarationDir": "./lib/types",
-		"resolveJsonModule": true,
+		"resolveJsonModule": true
 	},
 	"include": ["src/**/*"]
 }
