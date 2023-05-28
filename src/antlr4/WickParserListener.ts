@@ -4,6 +4,12 @@
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { CompilationUnitContext } from "./WickParser";
+import { SchemaContext } from "./WickParser";
+import { SchemaBlockContext } from "./WickParser";
+import { SchemaStatementContext } from "./WickParser";
+import { SchemaFieldContext } from "./WickParser";
+import { SchemaScopedBlockContext } from "./WickParser";
+import { SchemaTypeContext } from "./WickParser";
 import { StatementContext } from "./WickParser";
 import { IdContext } from "./WickParser";
 import { QuotelessArgumentContext } from "./WickParser";
@@ -33,6 +39,72 @@ export interface WickParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitCompilationUnit?: (ctx: CompilationUnitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.schema`.
+	 * @param ctx the parse tree
+	 */
+	enterSchema?: (ctx: SchemaContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.schema`.
+	 * @param ctx the parse tree
+	 */
+	exitSchema?: (ctx: SchemaContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.schemaBlock`.
+	 * @param ctx the parse tree
+	 */
+	enterSchemaBlock?: (ctx: SchemaBlockContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.schemaBlock`.
+	 * @param ctx the parse tree
+	 */
+	exitSchemaBlock?: (ctx: SchemaBlockContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.schemaStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterSchemaStatement?: (ctx: SchemaStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.schemaStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitSchemaStatement?: (ctx: SchemaStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.schemaField`.
+	 * @param ctx the parse tree
+	 */
+	enterSchemaField?: (ctx: SchemaFieldContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.schemaField`.
+	 * @param ctx the parse tree
+	 */
+	exitSchemaField?: (ctx: SchemaFieldContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.schemaScopedBlock`.
+	 * @param ctx the parse tree
+	 */
+	enterSchemaScopedBlock?: (ctx: SchemaScopedBlockContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.schemaScopedBlock`.
+	 * @param ctx the parse tree
+	 */
+	exitSchemaScopedBlock?: (ctx: SchemaScopedBlockContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.schemaType`.
+	 * @param ctx the parse tree
+	 */
+	enterSchemaType?: (ctx: SchemaTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.schemaType`.
+	 * @param ctx the parse tree
+	 */
+	exitSchemaType?: (ctx: SchemaTypeContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `WickParser.statement`.

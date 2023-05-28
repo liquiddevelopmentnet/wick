@@ -5,16 +5,35 @@ options {
   language=JavaScript;
 }
 
-compilationUnit: (statement)* EOF;
-statement: ((field | scopedBlock) (SEMICOLON | NL)?);
+compilationUnit     : (schema)? (statement)* EOF;
 
-id: GenericLiteral;
-quotelessArgument: GenericLiteral;
-str: StringLiteral;
-number_int: IntegerLiteral;
-number_double: DoubleLiteral;
-bool: BooleanLiteral;
-variable: VARIABLE_PREFIX id;
+// --- END START SCHEMA
+
+schema              : SchemaPrefix schemaBlock (NL)*;
+schemaBlock         : LBRACE (NL)* (schemaStatement)* RBRACE (NL)*;
+
+schemaStatement
+    : ((schemaField | schemaScopedBlock) (SEMICOLON | NL)*)
+    ;
+
+schemaField         : id SchemaTypeToken schemaType*;
+schemaScopedBlock   : id (SchemaTypeLiteral)*? schemaBlock;
+
+schemaType          : SchemaTypeLiteral;
+
+// END SCHEMA
+// --------------------------------
+// START CONFIG
+
+statement           : ((field | scopedBlock) (SEMICOLON | NL)+);
+
+id                  : GenericLiteral;
+quotelessArgument   : GenericLiteral;
+str                 : StringLiteral;
+number_int          : IntegerLiteral;
+number_double       : DoubleLiteral;
+bool                : BooleanLiteral;
+variable            : VARIABLE_PREFIX id;
 
 argument:
     ( quotelessArgument
@@ -25,7 +44,9 @@ argument:
     | variable
     );
 
-field: id argument*;
+field               : id argument*;
 
-scopedBlock: id (argument)*? block;
-block: LBRACE (statement)* RBRACE;
+scopedBlock         : id (argument)*? block;
+block               : LBRACE (NL)* (statement)* RBRACE (NL)*;
+
+// --- END CONFIG

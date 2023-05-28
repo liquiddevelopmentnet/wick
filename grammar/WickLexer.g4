@@ -8,6 +8,11 @@ StringLiteral
 IntegerLiteral         : [0-9]+;
 DoubleLiteral          : [0-9]+ '.' [0-9]*;
 BooleanLiteral         : 'true' | 'false';
+
+SchemaPrefix           : '@schema';
+SchemaTypeToken        : ':';
+SchemaTypeLiteral      : 'string' | 'integer' | 'double' | 'boolean' | 'any' | 'object';
+
 GenericLiteral         : [a-zA-Z_\-/#0-9]+;
 
 fragment DoubleQuotedString
