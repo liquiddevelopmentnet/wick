@@ -1,10 +1,10 @@
 {
-    "antlr4.generation": {
+	"antlr4.generation": {
 		"importDir": "",
 		"mode": "external",
 		"language": "Typescript",
 		"listeners": true,
 		"visitors": false,
-		"outputDir": "../src/antlr4",
+		"outputDir": "../src/antlr4"
 	}
 }

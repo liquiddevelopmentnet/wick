@@ -12,5 +12,5 @@
 		"declarationDir": "./lib/types",
 		"resolveJsonModule": true
 	},
-	"include": ["src/**/*"]
+	"include": ["./src/**/*"]
 }

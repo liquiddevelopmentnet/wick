@@ -1,0 +1,13 @@
+{
+	"name": "wick-core",
+	"version": "0.0.1-dev",
+	"main": "src/index.ts",
+	"dependencies": {
+		"antlr4ts": "^0.5.0-alpha.4",
+		"chalk": "4.1.2"
+	},
+	"devDependencies": {
+		"@types/node": "^20.2.5"
+	},
+	"private": false
+}
