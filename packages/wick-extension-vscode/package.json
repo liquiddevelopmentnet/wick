@@ -1,0 +1,53 @@
+{
+	"name": "wick-extension",
+	"displayName": "Wick Config Language Support",
+	"version": "0.0.1",
+	"description": "Features syntax highlighting, code completion and snippets for the Wick Config Language.",
+	"main": "out/extension.js",
+	"engines": {
+		"vscode": "^1.60.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "wick",
+				"extensions": [
+					".w"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "wick",
+				"scopeName": "source.wick",
+				"path": "./syntaxes/wick.tmLanguage.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "wick",
+				"path": "./wick.code-snippets"
+			}
+		]
+	},
+	"activationEvents": [
+		"onLanguage:wick"
+	],
+	"license": "MIT",
+	"scripts": {
+		"compile": "tsc &&vsce package --yarn"
+	},
+	"devDependencies": {
+		"typescript": "^4.4.3",
+		"@types/node": "^16.9.6",
+		"vscode": "^1.1.37"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^8.1.0"
+	},
+	"repository": "https://github.com/liquiddevelopmentnet/wick"
+}

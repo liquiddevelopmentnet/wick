@@ -1,0 +1,117 @@
+{
+	"name": "Wick",
+	"scopeName": "source.wick",
+	"patterns": [
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#punctuation"
+		},
+		{
+			"include": "#whitespace"
+		},
+		{
+			"include": "#ids"
+		},
+		{
+			"include": "#comments"
+		}
+	],
+	"repository": {
+		"ids": {
+			"patterns": [
+				{
+					"name": "entity.name.function.wick",
+					"match": "\\/?\\b[a-zA-Z_\\-/#0-9]+(?=(?:\\s*\\{|\\()|\\b)"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.wick",
+					"match": "//.*(?=$|\n)"
+				},
+				{
+					"name": "comment.block.wick",
+					"begin": "/\\*",
+					"end": "\\*/"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.double.wick",
+					"match": "\"(?:[^\"\\\\]|\\\\.)*\""
+				},
+				{
+					"name": "string.quoted.single.wick",
+					"match": "'(?:[^'\\\\]|\\\\.)*'"
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.integer.wick",
+					"match": "\\b[0-9]+\\b"
+				},
+				{
+					"name": "constant.numeric.float.wick",
+					"match": "\\b[0-9]+\\.[0-9]*\\b"
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.wick",
+					"match": "\\b(true|false|string|integer|double|boolean|any|object)\\b"
+				},
+				{
+					"name": "keyword.control.wick",
+					"match": "@schema"
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.wick",
+					"match": "\\$[a-zA-Z_\\-/#0-9]+"
+				}
+			]
+		},
+		"punctuation": {
+			"patterns": [
+				{
+					"name": "punctuation.brace.wick",
+					"match": "{}"
+				},
+				{
+					"name": "punctuation.semicolon.wick",
+					"match": ";"
+				}
+			]
+		},
+		"whitespace": {
+			"patterns": [
+				{
+					"name": "meta.whitespace.wick",
+					"match": "\\s+"
+				}
+			]
+		}
+	}
+}

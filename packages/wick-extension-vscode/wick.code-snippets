@@ -1,0 +1,7 @@
+{
+	"Wick Schema": {
+		"prefix": "schema",
+		"body": ["@schema ${arguments:} {", "\t$body", "}"],
+		"description": "Defines a schema"
+	}
+}

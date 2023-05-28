@@ -1,4 +1,4 @@
-// Generated from /home/fb/projects/wick/grammar/WickLexer.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from /home/fb/projects/wick/packages/wick-core/grammar/WickLexer.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ATN } from "antlr4ts/atn/ATN";

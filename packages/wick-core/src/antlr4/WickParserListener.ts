@@ -1,4 +1,4 @@
-// Generated from /home/fb/projects/wick/grammar/WickParser.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from /home/fb/projects/wick/packages/wick-core/grammar/WickParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
