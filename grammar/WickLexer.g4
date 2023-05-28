@@ -8,8 +8,7 @@ StringLiteral
 IntegerLiteral         : [0-9]+;
 DoubleLiteral          : [0-9]+ '.' [0-9]*;
 BooleanLiteral         : 'true' | 'false';
-
-IdLiteral              : [a-zA-Z_\-/#@0-9]+;
+GenericLiteral         : [a-zA-Z_\-/#0-9]+;
 
 fragment DoubleQuotedString
     : DOUBLE_QUOTE DoubleQuotedStringCharacter* DOUBLE_QUOTE
@@ -43,10 +42,11 @@ SINGLE_QUOTE            : '\'';
 LBRACE                  : '{';
 RBRACE                  : '}';
 VARIABLE_PREFIX         : '$';
-SEMICOLON               : ';';
 
-NL                      : ('\r'? '\n' | '\r') -> skip;
-WHITESPACE              : [ \t\r\n]+ -> skip;
+SEMICOLON               : ';';
+NL                      : ('\r'? '\n' | '\r')+;
+
+WHITESPACE              : [ \t]+ -> skip;
 
 COMMENT
     :   '/*' .*? '*/' -> skip

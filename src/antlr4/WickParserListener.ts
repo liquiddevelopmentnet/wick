@@ -6,6 +6,7 @@ import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { CompilationUnitContext } from "./WickParser";
 import { StatementContext } from "./WickParser";
 import { IdContext } from "./WickParser";
+import { QuotelessArgumentContext } from "./WickParser";
 import { StrContext } from "./WickParser";
 import { Number_intContext } from "./WickParser";
 import { Number_doubleContext } from "./WickParser";
@@ -54,6 +55,17 @@ export interface WickParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitId?: (ctx: IdContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `WickParser.quotelessArgument`.
+	 * @param ctx the parse tree
+	 */
+	enterQuotelessArgument?: (ctx: QuotelessArgumentContext) => void;
+	/**
+	 * Exit a parse tree produced by `WickParser.quotelessArgument`.
+	 * @param ctx the parse tree
+	 */
+	exitQuotelessArgument?: (ctx: QuotelessArgumentContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `WickParser.str`.

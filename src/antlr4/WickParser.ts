@@ -30,7 +30,7 @@ export class WickParser extends Parser {
 	public static readonly IntegerLiteral = 2;
 	public static readonly DoubleLiteral = 3;
 	public static readonly BooleanLiteral = 4;
-	public static readonly IdLiteral = 5;
+	public static readonly GenericLiteral = 5;
 	public static readonly DOUBLE_QUOTE = 6;
 	public static readonly SINGLE_QUOTE = 7;
 	public static readonly LBRACE = 8;
@@ -44,19 +44,21 @@ export class WickParser extends Parser {
 	public static readonly RULE_compilationUnit = 0;
 	public static readonly RULE_statement = 1;
 	public static readonly RULE_id = 2;
-	public static readonly RULE_str = 3;
-	public static readonly RULE_number_int = 4;
-	public static readonly RULE_number_double = 5;
-	public static readonly RULE_bool = 6;
-	public static readonly RULE_variable = 7;
-	public static readonly RULE_argument = 8;
-	public static readonly RULE_field = 9;
-	public static readonly RULE_scopedBlock = 10;
-	public static readonly RULE_block = 11;
+	public static readonly RULE_quotelessArgument = 3;
+	public static readonly RULE_str = 4;
+	public static readonly RULE_number_int = 5;
+	public static readonly RULE_number_double = 6;
+	public static readonly RULE_bool = 7;
+	public static readonly RULE_variable = 8;
+	public static readonly RULE_argument = 9;
+	public static readonly RULE_field = 10;
+	public static readonly RULE_scopedBlock = 11;
+	public static readonly RULE_block = 12;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"compilationUnit", "statement", "id", "str", "number_int", "number_double", 
-		"bool", "variable", "argument", "field", "scopedBlock", "block",
+		"compilationUnit", "statement", "id", "quotelessArgument", "str", "number_int", 
+		"number_double", "bool", "variable", "argument", "field", "scopedBlock", 
+		"block",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
@@ -65,8 +67,8 @@ export class WickParser extends Parser {
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, "StringLiteral", "IntegerLiteral", "DoubleLiteral", "BooleanLiteral", 
-		"IdLiteral", "DOUBLE_QUOTE", "SINGLE_QUOTE", "LBRACE", "RBRACE", "VARIABLE_PREFIX", 
-		"SEMICOLON", "NL", "WHITESPACE", "COMMENT", "LINE_COMMENT",
+		"GenericLiteral", "DOUBLE_QUOTE", "SINGLE_QUOTE", "LBRACE", "RBRACE", 
+		"VARIABLE_PREFIX", "SEMICOLON", "NL", "WHITESPACE", "COMMENT", "LINE_COMMENT",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(WickParser._LITERAL_NAMES, WickParser._SYMBOLIC_NAMES, []);
 
@@ -102,21 +104,21 @@ export class WickParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 27;
+			this.state = 29;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while (_la === WickParser.IdLiteral) {
+			while (_la === WickParser.GenericLiteral) {
 				{
 				{
-				this.state = 24;
+				this.state = 26;
 				this.statement();
 				}
 				}
-				this.state = 29;
+				this.state = 31;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 30;
+			this.state = 32;
 			this.match(WickParser.EOF);
 			}
 		}
@@ -143,29 +145,29 @@ export class WickParser extends Parser {
 			this.enterOuterAlt(_localctx, 1);
 			{
 			{
-			this.state = 34;
+			this.state = 36;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 1, this._ctx) ) {
 			case 1:
 				{
-				this.state = 32;
+				this.state = 34;
 				this.field();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 33;
+				this.state = 35;
 				this.scopedBlock();
 				}
 				break;
 			}
-			this.state = 37;
+			this.state = 39;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === WickParser.SEMICOLON || _la === WickParser.NL) {
 				{
-				this.state = 36;
+				this.state = 38;
 				_la = this._input.LA(1);
 				if (!(_la === WickParser.SEMICOLON || _la === WickParser.NL)) {
 				this._errHandler.recoverInline(this);
@@ -204,8 +206,33 @@ export class WickParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 39;
-			this.match(WickParser.IdLiteral);
+			this.state = 41;
+			this.match(WickParser.GenericLiteral);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public quotelessArgument(): QuotelessArgumentContext {
+		let _localctx: QuotelessArgumentContext = new QuotelessArgumentContext(this._ctx, this.state);
+		this.enterRule(_localctx, 6, WickParser.RULE_quotelessArgument);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 43;
+			this.match(WickParser.GenericLiteral);
 			}
 		}
 		catch (re) {
@@ -225,11 +252,11 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public str(): StrContext {
 		let _localctx: StrContext = new StrContext(this._ctx, this.state);
-		this.enterRule(_localctx, 6, WickParser.RULE_str);
+		this.enterRule(_localctx, 8, WickParser.RULE_str);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 41;
+			this.state = 45;
 			this.match(WickParser.StringLiteral);
 			}
 		}
@@ -250,11 +277,11 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public number_int(): Number_intContext {
 		let _localctx: Number_intContext = new Number_intContext(this._ctx, this.state);
-		this.enterRule(_localctx, 8, WickParser.RULE_number_int);
+		this.enterRule(_localctx, 10, WickParser.RULE_number_int);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 43;
+			this.state = 47;
 			this.match(WickParser.IntegerLiteral);
 			}
 		}
@@ -275,11 +302,11 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public number_double(): Number_doubleContext {
 		let _localctx: Number_doubleContext = new Number_doubleContext(this._ctx, this.state);
-		this.enterRule(_localctx, 10, WickParser.RULE_number_double);
+		this.enterRule(_localctx, 12, WickParser.RULE_number_double);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 45;
+			this.state = 49;
 			this.match(WickParser.DoubleLiteral);
 			}
 		}
@@ -300,11 +327,11 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public bool(): BoolContext {
 		let _localctx: BoolContext = new BoolContext(this._ctx, this.state);
-		this.enterRule(_localctx, 12, WickParser.RULE_bool);
+		this.enterRule(_localctx, 14, WickParser.RULE_bool);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 47;
+			this.state = 51;
 			this.match(WickParser.BooleanLiteral);
 			}
 		}
@@ -325,13 +352,13 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public variable(): VariableContext {
 		let _localctx: VariableContext = new VariableContext(this._ctx, this.state);
-		this.enterRule(_localctx, 14, WickParser.RULE_variable);
+		this.enterRule(_localctx, 16, WickParser.RULE_variable);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 49;
+			this.state = 53;
 			this.match(WickParser.VARIABLE_PREFIX);
-			this.state = 50;
+			this.state = 54;
 			this.id();
 			}
 		}
@@ -352,40 +379,46 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public argument(): ArgumentContext {
 		let _localctx: ArgumentContext = new ArgumentContext(this._ctx, this.state);
-		this.enterRule(_localctx, 16, WickParser.RULE_argument);
+		this.enterRule(_localctx, 18, WickParser.RULE_argument);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 57;
+			this.state = 62;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
+			case WickParser.GenericLiteral:
+				{
+				this.state = 56;
+				this.quotelessArgument();
+				}
+				break;
 			case WickParser.StringLiteral:
 				{
-				this.state = 52;
+				this.state = 57;
 				this.str();
 				}
 				break;
 			case WickParser.IntegerLiteral:
 				{
-				this.state = 53;
+				this.state = 58;
 				this.number_int();
 				}
 				break;
 			case WickParser.DoubleLiteral:
 				{
-				this.state = 54;
+				this.state = 59;
 				this.number_double();
 				}
 				break;
 			case WickParser.BooleanLiteral:
 				{
-				this.state = 55;
+				this.state = 60;
 				this.bool();
 				}
 				break;
 			case WickParser.VARIABLE_PREFIX:
 				{
-				this.state = 56;
+				this.state = 61;
 				this.variable();
 				}
 				break;
@@ -411,26 +444,28 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public field(): FieldContext {
 		let _localctx: FieldContext = new FieldContext(this._ctx, this.state);
-		this.enterRule(_localctx, 18, WickParser.RULE_field);
-		let _la: number;
+		this.enterRule(_localctx, 20, WickParser.RULE_field);
 		try {
+			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 59;
+			this.state = 64;
 			this.id();
-			this.state = 63;
+			this.state = 68;
 			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << WickParser.StringLiteral) | (1 << WickParser.IntegerLiteral) | (1 << WickParser.DoubleLiteral) | (1 << WickParser.BooleanLiteral) | (1 << WickParser.VARIABLE_PREFIX))) !== 0)) {
-				{
-				{
-				this.state = 60;
-				this.argument();
+			_alt = this.interpreter.adaptivePredict(this._input, 4, this._ctx);
+			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+				if (_alt === 1) {
+					{
+					{
+					this.state = 65;
+					this.argument();
+					}
+					}
 				}
-				}
-				this.state = 65;
+				this.state = 70;
 				this._errHandler.sync(this);
-				_la = this._input.LA(1);
+				_alt = this.interpreter.adaptivePredict(this._input, 4, this._ctx);
 			}
 			}
 		}
@@ -451,30 +486,30 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public scopedBlock(): ScopedBlockContext {
 		let _localctx: ScopedBlockContext = new ScopedBlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 20, WickParser.RULE_scopedBlock);
+		this.enterRule(_localctx, 22, WickParser.RULE_scopedBlock);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 66;
+			this.state = 71;
 			this.id();
-			this.state = 70;
+			this.state = 75;
 			this._errHandler.sync(this);
 			_alt = this.interpreter.adaptivePredict(this._input, 5, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 67;
+					this.state = 72;
 					this.argument();
 					}
 					}
 				}
-				this.state = 72;
+				this.state = 77;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 5, this._ctx);
 			}
-			this.state = 73;
+			this.state = 78;
 			this.block();
 			}
 		}
@@ -495,28 +530,28 @@ export class WickParser extends Parser {
 	// @RuleVersion(0)
 	public block(): BlockContext {
 		let _localctx: BlockContext = new BlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 22, WickParser.RULE_block);
+		this.enterRule(_localctx, 24, WickParser.RULE_block);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 75;
+			this.state = 80;
 			this.match(WickParser.LBRACE);
-			this.state = 79;
+			this.state = 84;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while (_la === WickParser.IdLiteral) {
+			while (_la === WickParser.GenericLiteral) {
 				{
 				{
-				this.state = 76;
+				this.state = 81;
 				this.statement();
 				}
 				}
-				this.state = 81;
+				this.state = 86;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 82;
+			this.state = 87;
 			this.match(WickParser.RBRACE);
 			}
 		}
@@ -536,39 +571,41 @@ export class WickParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x11W\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x11\\\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
-		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x03" +
-		"\x02\x07\x02\x1C\n\x02\f\x02\x0E\x02\x1F\v\x02\x03\x02\x03\x02\x03\x03" +
-		"\x03\x03\x05\x03%\n\x03\x03\x03\x05\x03(\n\x03\x03\x04\x03\x04\x03\x05" +
-		"\x03\x05\x03\x06\x03\x06\x03\x07\x03\x07\x03\b\x03\b\x03\t\x03\t\x03\t" +
-		"\x03\n\x03\n\x03\n\x03\n\x03\n\x05\n<\n\n\x03\v\x03\v\x07\v@\n\v\f\v\x0E" +
-		"\vC\v\v\x03\f\x03\f\x07\fG\n\f\f\f\x0E\fJ\v\f\x03\f\x03\f\x03\r\x03\r" +
-		"\x07\rP\n\r\f\r\x0E\rS\v\r\x03\r\x03\r\x03\r\x03H\x02\x02\x0E\x02\x02" +
-		"\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16" +
-		"\x02\x18\x02\x02\x03\x03\x02\r\x0E\x02T\x02\x1D\x03\x02\x02\x02\x04$\x03" +
-		"\x02\x02\x02\x06)\x03\x02\x02\x02\b+\x03\x02\x02\x02\n-\x03\x02\x02\x02" +
-		"\f/\x03\x02\x02\x02\x0E1\x03\x02\x02\x02\x103\x03\x02\x02\x02\x12;\x03" +
-		"\x02\x02\x02\x14=\x03\x02\x02\x02\x16D\x03\x02\x02\x02\x18M\x03\x02\x02" +
-		"\x02\x1A\x1C\x05\x04\x03\x02\x1B\x1A\x03\x02\x02\x02\x1C\x1F\x03\x02\x02" +
-		"\x02\x1D\x1B\x03\x02\x02\x02\x1D\x1E\x03\x02\x02\x02\x1E \x03\x02\x02" +
-		"\x02\x1F\x1D\x03\x02\x02\x02 !\x07\x02\x02\x03!\x03\x03\x02\x02\x02\"" +
-		"%\x05\x14\v\x02#%\x05\x16\f\x02$\"\x03\x02\x02\x02$#\x03\x02\x02\x02%" +
-		"\'\x03\x02\x02\x02&(\t\x02\x02\x02\'&\x03\x02\x02\x02\'(\x03\x02\x02\x02" +
-		"(\x05\x03\x02\x02\x02)*\x07\x07\x02\x02*\x07\x03\x02\x02\x02+,\x07\x03" +
-		"\x02\x02,\t\x03\x02\x02\x02-.\x07\x04\x02\x02.\v\x03\x02\x02\x02/0\x07" +
-		"\x05\x02\x020\r\x03\x02\x02\x0212\x07\x06\x02\x022\x0F\x03\x02\x02\x02" +
-		"34\x07\f\x02\x0245\x05\x06\x04\x025\x11\x03\x02\x02\x026<\x05\b\x05\x02" +
-		"7<\x05\n\x06\x028<\x05\f\x07\x029<\x05\x0E\b\x02:<\x05\x10\t\x02;6\x03" +
-		"\x02\x02\x02;7\x03\x02\x02\x02;8\x03\x02\x02\x02;9\x03\x02\x02\x02;:\x03" +
-		"\x02\x02\x02<\x13\x03\x02\x02\x02=A\x05\x06\x04\x02>@\x05\x12\n\x02?>" +
-		"\x03\x02\x02\x02@C\x03\x02\x02\x02A?\x03\x02\x02\x02AB\x03\x02\x02\x02" +
-		"B\x15\x03\x02\x02\x02CA\x03\x02\x02\x02DH\x05\x06\x04\x02EG\x05\x12\n" +
-		"\x02FE\x03\x02\x02\x02GJ\x03\x02\x02\x02HI\x03\x02\x02\x02HF\x03\x02\x02" +
-		"\x02IK\x03\x02\x02\x02JH\x03\x02\x02\x02KL\x05\x18\r\x02L\x17\x03\x02" +
-		"\x02\x02MQ\x07\n\x02\x02NP\x05\x04\x03\x02ON\x03\x02\x02\x02PS\x03\x02" +
-		"\x02\x02QO\x03\x02\x02\x02QR\x03\x02\x02\x02RT\x03\x02\x02\x02SQ\x03\x02" +
-		"\x02\x02TU\x07\v\x02\x02U\x19\x03\x02\x02\x02\t\x1D$\';AHQ";
+		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
+		"\x0E\t\x0E\x03\x02\x07\x02\x1E\n\x02\f\x02\x0E\x02!\v\x02\x03\x02\x03" +
+		"\x02\x03\x03\x03\x03\x05\x03\'\n\x03\x03\x03\x05\x03*\n\x03\x03\x04\x03" +
+		"\x04\x03\x05\x03\x05\x03\x06\x03\x06\x03\x07\x03\x07\x03\b\x03\b\x03\t" +
+		"\x03\t\x03\n\x03\n\x03\n\x03\v\x03\v\x03\v\x03\v\x03\v\x03\v\x05\vA\n" +
+		"\v\x03\f\x03\f\x07\fE\n\f\f\f\x0E\fH\v\f\x03\r\x03\r\x07\rL\n\r\f\r\x0E" +
+		"\rO\v\r\x03\r\x03\r\x03\x0E\x03\x0E\x07\x0EU\n\x0E\f\x0E\x0E\x0EX\v\x0E" +
+		"\x03\x0E\x03\x0E\x03\x0E\x03M\x02\x02\x0F\x02\x02\x04\x02\x06\x02\b\x02" +
+		"\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x02" +
+		"\x03\x03\x02\r\x0E\x02Y\x02\x1F\x03\x02\x02\x02\x04&\x03\x02\x02\x02\x06" +
+		"+\x03\x02\x02\x02\b-\x03\x02\x02\x02\n/\x03\x02\x02\x02\f1\x03\x02\x02" +
+		"\x02\x0E3\x03\x02\x02\x02\x105\x03\x02\x02\x02\x127\x03\x02\x02\x02\x14" +
+		"@\x03\x02\x02\x02\x16B\x03\x02\x02\x02\x18I\x03\x02\x02\x02\x1AR\x03\x02" +
+		"\x02\x02\x1C\x1E\x05\x04\x03\x02\x1D\x1C\x03\x02\x02\x02\x1E!\x03\x02" +
+		"\x02\x02\x1F\x1D\x03\x02\x02\x02\x1F \x03\x02\x02\x02 \"\x03\x02\x02\x02" +
+		"!\x1F\x03\x02\x02\x02\"#\x07\x02\x02\x03#\x03\x03\x02\x02\x02$\'\x05\x16" +
+		"\f\x02%\'\x05\x18\r\x02&$\x03\x02\x02\x02&%\x03\x02\x02\x02\')\x03\x02" +
+		"\x02\x02(*\t\x02\x02\x02)(\x03\x02\x02\x02)*\x03\x02\x02\x02*\x05\x03" +
+		"\x02\x02\x02+,\x07\x07\x02\x02,\x07\x03\x02\x02\x02-.\x07\x07\x02\x02" +
+		".\t\x03\x02\x02\x02/0\x07\x03\x02\x020\v\x03\x02\x02\x0212\x07\x04\x02" +
+		"\x022\r\x03\x02\x02\x0234\x07\x05\x02\x024\x0F\x03\x02\x02\x0256\x07\x06" +
+		"\x02\x026\x11\x03\x02\x02\x0278\x07\f\x02\x0289\x05\x06\x04\x029\x13\x03" +
+		"\x02\x02\x02:A\x05\b\x05\x02;A\x05\n\x06\x02<A\x05\f\x07\x02=A\x05\x0E" +
+		"\b\x02>A\x05\x10\t\x02?A\x05\x12\n\x02@:\x03\x02\x02\x02@;\x03\x02\x02" +
+		"\x02@<\x03\x02\x02\x02@=\x03\x02\x02\x02@>\x03\x02\x02\x02@?\x03\x02\x02" +
+		"\x02A\x15\x03\x02\x02\x02BF\x05\x06\x04\x02CE\x05\x14\v\x02DC\x03\x02" +
+		"\x02\x02EH\x03\x02\x02\x02FD\x03\x02\x02\x02FG\x03\x02\x02\x02G\x17\x03" +
+		"\x02\x02\x02HF\x03\x02\x02\x02IM\x05\x06\x04\x02JL\x05\x14\v\x02KJ\x03" +
+		"\x02\x02\x02LO\x03\x02\x02\x02MN\x03\x02\x02\x02MK\x03\x02\x02\x02NP\x03" +
+		"\x02\x02\x02OM\x03\x02\x02\x02PQ\x05\x1A\x0E\x02Q\x19\x03\x02\x02\x02" +
+		"RV\x07\n\x02\x02SU\x05\x04\x03\x02TS\x03\x02\x02\x02UX\x03\x02\x02\x02" +
+		"VT\x03\x02\x02\x02VW\x03\x02\x02\x02WY\x03\x02\x02\x02XV\x03\x02\x02\x02" +
+		"YZ\x07\v\x02\x02Z\x1B\x03\x02\x02\x02\t\x1F&)@FMV";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!WickParser.__ATN) {
@@ -641,7 +678,7 @@ export class StatementContext extends ParserRuleContext {
 
 
 export class IdContext extends ParserRuleContext {
-	public IdLiteral(): TerminalNode { return this.getToken(WickParser.IdLiteral, 0); }
+	public GenericLiteral(): TerminalNode { return this.getToken(WickParser.GenericLiteral, 0); }
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
@@ -657,6 +694,28 @@ export class IdContext extends ParserRuleContext {
 	public exitRule(listener: WickParserListener): void {
 		if (listener.exitId) {
 			listener.exitId(this);
+		}
+	}
+}
+
+
+export class QuotelessArgumentContext extends ParserRuleContext {
+	public GenericLiteral(): TerminalNode { return this.getToken(WickParser.GenericLiteral, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return WickParser.RULE_quotelessArgument; }
+	// @Override
+	public enterRule(listener: WickParserListener): void {
+		if (listener.enterQuotelessArgument) {
+			listener.enterQuotelessArgument(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: WickParserListener): void {
+		if (listener.exitQuotelessArgument) {
+			listener.exitQuotelessArgument(this);
 		}
 	}
 }
@@ -776,6 +835,9 @@ export class VariableContext extends ParserRuleContext {
 
 
 export class ArgumentContext extends ParserRuleContext {
+	public quotelessArgument(): QuotelessArgumentContext | undefined {
+		return this.tryGetRuleContext(0, QuotelessArgumentContext);
+	}
 	public str(): StrContext | undefined {
 		return this.tryGetRuleContext(0, StrContext);
 	}
