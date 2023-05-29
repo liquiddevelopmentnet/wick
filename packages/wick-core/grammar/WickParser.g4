@@ -45,7 +45,7 @@ argument:
 
 field: id argument*;
 
-scopedBlock: id (argument)*? block;
+scopedBlock: id (argument)*? block (NL)*;
 block: LBRACE (NL)* (statement)* RBRACE (NL)*;
 
 // --- END CONFIG

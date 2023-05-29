@@ -77,11 +77,15 @@
 			"patterns": [
 				{
 					"name": "keyword.control.wick",
-					"match": "\\b(true|false|string|integer|double|boolean|any|object)\\b"
+					"match": "\\b(true|false|str|number|int|double|bool|any|object)\\b"
 				},
 				{
 					"name": "keyword.control.wick",
 					"match": "@schema"
+				},
+				{
+					"name": "keyword.control.wick",
+					"match": "\\?"
 				}
 			]
 		},

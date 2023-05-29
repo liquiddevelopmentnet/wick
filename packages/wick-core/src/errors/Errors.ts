@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 
 export type WickError = {
-	name: 'RedeclarationError' | 'GenericError'
+	name: 'RedeclarationError' | 'SchemaError' | 'GenericError'
 	message: string
 	line: number
 	column: number

@@ -9,12 +9,13 @@ BooleanLiteral: 'true' | 'false';
 SchemaPrefix: '@schema';
 SchemaTypeToken: ':';
 SchemaTypeLiteral:
-	'string'
-	| 'integer'
+	'str'
+	| 'number'
+	| 'int'
 	| 'double'
-	| 'boolean'
-	| 'any'
-	| 'object';
+	| 'bool'
+	| 'object'
+	| 'any';
 
 GenericLiteral: [a-zA-Z_\-/#0-9]+;
 

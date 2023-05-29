@@ -7,7 +7,8 @@ import {
 	ScopedBlockContext,
 } from '../antlr4/WickParser'
 import { WickParserListener } from '../antlr4/WickParserListener'
-import { pushError } from '../util/Errors'
+import { pushError } from '../errors/Errors'
+import SchemaType, { schemaTypeIs } from '../language/SchemaType'
 
 export class WickWalker implements WickParserListener {
 	scopeLevel: string[] = []
@@ -19,7 +20,7 @@ export class WickWalker implements WickParserListener {
 		this.callback = callback
 	}
 
-	_assignToScope(
+	private _assignToScope(
 		id: string,
 		val: any,
 		ctx: ParserRuleContext,
@@ -32,7 +33,7 @@ export class WickWalker implements WickParserListener {
 		if (!canMerge && obj[id]) {
 			pushError({
 				name: 'RedeclarationError',
-				message: `duplicated field ${id} is not allowed here`,
+				message: `Duplicated field ${id} is not allowed here`,
 				line: ctx.start.line,
 				column: ctx.start.charPositionInLine,
 			})
@@ -56,6 +57,80 @@ export class WickWalker implements WickParserListener {
 		else {
 			obj[id] = val
 		}
+	}
+
+	private _checkSchema(
+		id: string,
+		val: any,
+		types: SchemaType[],
+		ctx: FieldContext
+	) {
+		if (!this.schema) return
+
+		let schema = this.schema
+		this.scopeLevel.forEach((scope) => (schema = schema[scope] ??= {}))
+
+		if (!schema[id]) {
+			pushError({
+				name: 'SchemaError',
+				message: `Field ${id} is not defined in the schema`,
+				line: ctx.start.line,
+				column: ctx.start.charPositionInLine,
+			})
+			return
+		}
+
+		if (Array.isArray(schema[id])) {
+			let schemaTypes = schema[id] as SchemaType[]
+			let valTypes = types
+
+			if (schemaTypes.length !== valTypes.length) {
+				pushError({
+					name: 'SchemaError',
+					message: `Field ${id} expects ${schemaTypes}, got ${valTypes}`,
+					line: ctx.start.line,
+					column: ctx.start.charPositionInLine,
+				})
+				return
+			}
+
+			for (let i = 0; i < schemaTypes.length; i++) {
+				if (schemaTypeIs(schemaTypes[i], valTypes[i])) continue
+
+				pushError({
+					name: 'SchemaError',
+					message: `Field ${id} expects ${schemaTypes}, got ${valTypes}`,
+					line: ctx.start.line,
+					column: ctx.start.charPositionInLine,
+				})
+			}
+		}
+	}
+
+	private _checkMissingSchema() {
+		if (!this.schema) return
+
+		let scope: string[] = []
+		const check = (obj: any, schema: any) => {
+			for (let key in schema) {
+				if (!obj[key]) {
+					pushError({
+						name: 'SchemaError',
+						message: `Non-optional field ${scope.join('.')}.${key}(${
+							schema[key]
+						}) is missing`,
+						line: 0,
+						column: 0,
+					})
+				} else if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+					scope.push(key)
+					check(obj[key], schema[key])
+					scope.pop()
+				}
+			}
+		}
+
+		check(this.object, this.schema)
 	}
 
 	// --- START SCHEMA
@@ -94,30 +169,42 @@ export class WickWalker implements WickParserListener {
 	enterField(ctx: FieldContext) {
 		let id = ctx.id().text
 		let val: any = []
+		let types: SchemaType[] = []
 		ctx.argument() &&
 			ctx.argument().forEach((arg) => {
-				arg.quotelessArgument() && val.push(arg.quotelessArgument()!.text)
+				arg.quotelessArgument() &&
+					val.push(arg.quotelessArgument()!.text) &&
+					types.push(SchemaType.String)
 
 				arg.str() &&
-					val.push(arg.str()!.text.substring(1, arg.str()!.text.length - 1))
+					val.push(arg.str()!.text.substring(1, arg.str()!.text.length - 1)) &&
+					types.push(SchemaType.String)
 
-				arg.number_int() && val.push(parseInt(arg.number_int()!.text))
+				arg.number_int() &&
+					val.push(parseInt(arg.number_int()!.text)) &&
+					types.push(SchemaType.Int)
 
-				arg.number_double() && val.push(parseFloat(arg.number_double()!.text))
+				arg.number_double() &&
+					val.push(parseFloat(arg.number_double()!.text)) &&
+					types.push(SchemaType.Double)
 
-				arg.bool() && val.push(arg.bool()!.text === 'true')
+				arg.bool() &&
+					val.push(arg.bool()!.text === 'true') &&
+					types.push(SchemaType.Bool)
 
 				arg.variable() && val.push({ _variable: arg.variable()!.text })
 			})
 
-		val.length === 0 && (val = [true])
+		val.length === 0 && (val = [true]) && types.push(SchemaType.Bool)
 
+		this._checkSchema(id, val, types, ctx)
 		this._assignToScope(id, val, ctx)
 	}
 
 	// END CONFIG
 
 	exitCompilationUnit() {
+		this._checkMissingSchema()
 		this.callback(this.object)
 	}
 }
