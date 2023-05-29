@@ -1,5 +1,4 @@
 {
-	"name": "wick",
 	"description": "A simple config language",
 	"workspaces": [
 		"packages/*"

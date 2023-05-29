@@ -1,0 +1,9 @@
+{
+	"name": "@wicklang/cli",
+	"type": "module",
+	"version": "1.0.0",
+	"bin": "./src/wick.js",
+	"description": "CLI for the Wick language.",
+	"license": "MIT",
+	"private": false
+}
