@@ -1,9 +1,21 @@
 {
 	"name": "@wicklang/cli",
-	"type": "module",
 	"version": "1.0.0",
-	"bin": "./src/wick.js",
+	"bin": "./out/wick.js",
+	"scripts": {
+		"build": "tsc",
+		"build-publish": "tsc && npm publish --access public"
+	},
 	"description": "CLI for the Wick language.",
 	"license": "MIT",
-	"private": false
+	"private": false,
+	"dependencies": {
+		"chalk": "4.1.2",
+		"signale": "^1.4.0",
+		"yargs": "^17.7.2"
+	},
+	"devDependencies": {
+		"@types/signale": "^1.4.4",
+		"@types/yargs": "^17.0.24"
+	}
 }

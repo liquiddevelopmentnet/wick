@@ -7,7 +7,7 @@ import {
 	ScopedBlockContext,
 } from '../antlr4/WickParser'
 import { WickParserListener } from '../antlr4/WickParserListener'
-import { pushError } from '../errors/Errors'
+import WickErrors from '../errors/WickErrors'
 import SchemaType, { schemaTypeIs } from '../language/SchemaType'
 
 export class WickWalker implements WickParserListener {
@@ -31,7 +31,7 @@ export class WickWalker implements WickParserListener {
 		this.scopeLevel.forEach((scope) => (obj = obj[scope] ??= {}))
 
 		if (!canMerge && obj[id]) {
-			pushError({
+			WickErrors.errors.push({
 				name: 'RedeclarationError',
 				message: `Duplicated field ${id} is not allowed here`,
 				line: ctx.start.line,
@@ -71,7 +71,7 @@ export class WickWalker implements WickParserListener {
 		this.scopeLevel.forEach((scope) => (schema = schema[scope] ??= {}))
 
 		if (!schema[id]) {
-			pushError({
+			WickErrors.errors.push({
 				name: 'SchemaError',
 				message: `Field ${id} is not defined in the schema`,
 				line: ctx.start.line,
@@ -85,7 +85,7 @@ export class WickWalker implements WickParserListener {
 			let valTypes = types
 
 			if (schemaTypes.length !== valTypes.length) {
-				pushError({
+				WickErrors.errors.push({
 					name: 'SchemaError',
 					message: `Field ${id} expects ${schemaTypes}, got ${valTypes}`,
 					line: ctx.start.line,
@@ -97,7 +97,7 @@ export class WickWalker implements WickParserListener {
 			for (let i = 0; i < schemaTypes.length; i++) {
 				if (schemaTypeIs(schemaTypes[i], valTypes[i])) continue
 
-				pushError({
+				WickErrors.errors.push({
 					name: 'SchemaError',
 					message: `Field ${id} expects ${schemaTypes}, got ${valTypes}`,
 					line: ctx.start.line,
@@ -114,7 +114,7 @@ export class WickWalker implements WickParserListener {
 		const check = (obj: any, schema: any) => {
 			for (let key in schema) {
 				if (!obj[key]) {
-					pushError({
+					WickErrors.errors.push({
 						name: 'SchemaError',
 						message: `Non-optional field ${scope.join('.')}.${key}(${
 							schema[key]
