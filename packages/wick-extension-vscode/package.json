@@ -1,5 +1,5 @@
 {
-	"name": "@wicklang/wick-vscode",
+	"name": "wicklang-vscode-support",
 	"displayName": "Wick Config Language Support",
 	"version": "0.0.1",
 	"description": "Features syntax highlighting, code completion and snippets for the Wick Config Language.",
