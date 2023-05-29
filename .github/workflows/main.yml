@@ -1,0 +1,25 @@
+name: ci
+on: [push]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set node version
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+
+      - name: run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install --frozen-lockfile
+
+      - name: compile vscode extension
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: compile
+          dir: 'packages/wick-extension-vscode'

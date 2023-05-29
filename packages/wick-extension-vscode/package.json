@@ -39,12 +39,13 @@
 	],
 	"license": "MIT",
 	"scripts": {
-		"compile": "tsc &&vsce package --yarn"
+		"compile": "tsc && vsce package --yarn"
 	},
 	"devDependencies": {
 		"typescript": "^4.4.3",
 		"@types/node": "^16.9.6",
-		"vscode": "^1.1.37"
+		"vscode": "^1.1.37",
+		"@vscode/vsce": "2.15.0"
 	},
 	"dependencies": {
 		"vscode-languageclient": "^8.1.0"
